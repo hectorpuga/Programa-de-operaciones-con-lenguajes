@@ -59,108 +59,8 @@ class OperationLenguajes {
     String Operacion = stdin.readLineSync() ?? 'no lenguajes';
 
     List A = Operacion.split('');
-    EvalucacionParentesis(A);
 
 //Δ
-  }
-
-  EvalucacionParentesis(List A) {
-    List Operation = [];
-    List Operation2 = [];
-    int aux = 0;
-    int aux2 = 0;
-
-    // ['(','(','L','1','n','L2',')','Δ','L','2',')','U','(','L','3','U','L2',')']
-    String Operations = '';
-    String Operations2 = '';
-
-    //(L1U(L2UL3))Δ(L2n(L3.L2))
-    for (var i = 0; i < A.length; i++) {
-      for (var j = 0; j < Signo.length; j++) {
-        if (A[i] == Signo[j]) {
-          for (var k = i; k >= i - 2; k--) {
-            // Operations += A[k];
-
-            if (A[k] == ')') {
-              for (var n = (k - 1); n >= 0; n--) {
-                if (A[k] != '(') {
-                  Operations += A[n];
-                  if (A[n] == '(') {
-                    aux2 = aux;
-                    aux = n;
-
-                    if (aux > aux2) {
-                      break;
-                    }
-                  }
-                }
-              }
-            }
-          }
-
-          Operation.add(Operations.split('').reversed.join());
-          Operation.remove('');
-          Operations = '';
-        }
-      }
-    }
-    aux = 0;
-    aux2 = 0;
-
-    for (var i = 0; i < A.length; i++) {
-      for (var j = 0; j < Signo.length; j++) {
-        if (A[i] == Signo[j]) {
-          for (var k = i; k <= i + 1; k++) {
-            // Operations += A[k];
-
-            if (A[k] == '(') {
-              for (var n = (k + 1); n < A.length; n++) {
-                if (A[k] != ')') {
-                  Operations2 += A[n];
-                  if (A[n] == ')') {
-                    break;
-                  }
-                }
-              }
-            }
-          }
-
-          Operation2.add(Operations2.split('').join());
-          Operation2.remove('');
-          Operations2 = '';
-        }
-      }
-    }
-
-    print(Operation);
-
-    for (var i = 0; i < Operation.length; i++) {
-      //print(Operation[i].length);
-      print('.................' + Operation[i]);
-      if (Operation[i].length == 7) {
-        LeerOperacionesSimples(Operation[i]);
-      } else {
-        OperacionesLargas.add(Operation[i]);
-      }
-    }
-    //(L1U(L2UL3))Δ(L2n(L2.(L3nL2)))
-
-    for (var i = 0; i < Operation2.length; i++) {
-      if (Operation2[i].length == 7) {
-        LeerOperacionesSimples(Operation2[i]);
-      } else {
-        OperacionesLargas.add(Operation2[i]);
-      }
-    }
-    //
-//abcdefj
-//3
-//{L1: [abe, def], L2: [ade, acd], L3: [afd, aca]}
-//(L1U(L2UL3))Δ(L2n(L3.L2))
-    ReplazoOperacionesLargas();
-
-    //print(Operation);
-    //print(Operation2);
   }
 
   LeerOperacionesSimples(String operacion) {
@@ -176,18 +76,6 @@ class OperationLenguajes {
         }
       }
     }
-  }
-
-  ReplazoOperacionesLargas() {
-    Resultado.forEach((key, value) {
-      for (var i = 0; i < OperacionesLargas.length; i++) {
-        //print(key + '.... ${OperacionesLargas[i]}');
-      }
-    });
-
-    print(Resultado);
-
-    print(OperacionesLargas);
   }
 
   Operaciones(String op, String a, String d) {
