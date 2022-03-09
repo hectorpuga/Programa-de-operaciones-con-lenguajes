@@ -1,7 +1,35 @@
 import 'dart:io';
 
+import 'algoritmo_shunting_yard.dart';
+
 main() {
-  OperationLenguajes();
+  final f = ShuntingYard([
+    '(',
+    'L1',
+    'U',
+    '(',
+    'L2',
+    'U',
+    'L3',
+    ')',
+    ')',
+    'Δ',
+    '(',
+    'L2',
+    'n',
+    '(',
+    'L2',
+    '*',
+    '(',
+    'L3',
+    '*',
+    'L2',
+    ')',
+    ')',
+    ')'
+  ]);
+
+  print(f.prefi);
 }
 
 class OperationLenguajes {
@@ -58,7 +86,18 @@ class OperationLenguajes {
 
     String Operacion = stdin.readLineSync() ?? 'no lenguajes';
 
-    List A = Operacion.split('');
+    List A = [];
+    for (var i = 0; i < Operacion.length; i++) {
+      if (Operacion.substring(i, i + 1) == 'L') {
+        String L = Operacion.substring(i, i + 2);
+        i = i + 1;
+        A.add(L);
+      } else {
+        A.add(Operacion.substring(i, i + 1));
+      }
+    }
+
+    print(A);
 
 //Δ
   }
