@@ -21,7 +21,8 @@ class ShuntingYard {
         pila.push(Operacion[i]);
 
         contador++;
-      } else if (RegExp('[U,n,-,Δ,c,*]').hasMatch(Operacion[i])) {
+      } else if (RegExp('[U°Δ~\*]').hasMatch(Operacion[i]) ||
+          Operacion[i] == '-') {
         if (!pila.isEmpty) {
           if (compararPresedencia(Operacion[i], pila.peek)) {
             prefija.add(pila.pop());
@@ -70,8 +71,8 @@ class ShuntingYard {
       case "Δ":
         return 4;
 
-      case "n":
-      case "c":
+      case "°":
+      case "~":
       case "*":
         return 2;
 
@@ -92,8 +93,8 @@ class ShuntingYard {
     switch (op) {
       case "Δ":
         return 3;
-      case "n":
-      case "c":
+      case "°":
+      case "~":
       case "*":
         return 2;
 

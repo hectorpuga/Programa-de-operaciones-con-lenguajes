@@ -14,7 +14,7 @@ class RPN {
     String eleDer, eleIzq;
 
     for (var token in prefija) {
-      if (RegExp('[U,n,-,Δ,c,*]').hasMatch(token)) {
+      if (RegExp('[U,n,\-,Δ,c,\*]').hasMatch(token)) {
         eleDer = pila.pop();
 
         eleIzq = pila.pop();
