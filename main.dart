@@ -1,48 +1,23 @@
+import 'dart:collection';
 import 'dart:io';
 
 import 'algoritmo_shunting_yard.dart';
+import 'stack.dart';
 
 main() {
-  final f = ShuntingYard([
-    '(',
-    'L1',
-    'U',
-    '(',
-    'L2',
-    'U',
-    'L3',
-    ')',
-    ')',
-    'Δ',
-    '(',
-    'L2',
-    'n',
-    '(',
-    'L2',
-    '*',
-    '(',
-    'L3',
-    '*',
-    'L2',
-    ')',
-    ')',
-    ')'
-  ]);
-
-  print(f.prefi);
+  OperationLenguajes op = OperationLenguajes();
+  op.InputData();
 }
 
 class OperationLenguajes {
-  List Signo = ['U', 'n', '-', 'Δ', 'c', '.'];
+  List<String> Signo = ['U', 'n', '-', 'Δ', 'c', '.'];
   String? alfabeto;
   int? a;
-  Map<String, List> lenguajes = {};
+  Map<String, List<String>> lenguajes = {};
   Map<String, List> Resultado = {};
   List<String> OperacionesLargas = [];
 
-  OperationLenguajes() {
-    InputData();
-  }
+  OperationLenguajes() {}
   void InputData() {
     stdout.writeln('Ingrese los simbolos del alfabeto');
     alfabeto = stdin.readLineSync() ?? 'no alfabeto';
@@ -55,7 +30,7 @@ class OperationLenguajes {
       stdout.writeln('Ingrese Lenguaje ${i + 1}');
       String LG = stdin.readLineSync() ?? 'no lenguajes';
 
-      List ArregloLg = LG.split(',');
+      List<String> ArregloLg = LG.split(',');
 
       if (EvaluacionLenguaje(ArregloLg)) {
         print(EvaluacionLenguaje(LG.split(',')));
@@ -86,7 +61,7 @@ class OperationLenguajes {
 
     String Operacion = stdin.readLineSync() ?? 'no lenguajes';
 
-    List A = [];
+    List<String> A = [];
     for (var i = 0; i < Operacion.length; i++) {
       if (Operacion.substring(i, i + 1) == 'L') {
         String L = Operacion.substring(i, i + 2);
@@ -97,59 +72,55 @@ class OperationLenguajes {
       }
     }
 
-    print(A);
+    final f = ShuntingYard(A);
+    print(f.prefi);
+
+    prefija = f.prefi;
+
+    print(rpn());
 
 //Δ
   }
 
-  LeerOperacionesSimples(String operacion) {
-    for (var i = 0; i < operacion.length; i++) {
-      for (var j = 0; j < Signo.length; j++) {
-        if (operacion.substring(i, i + 1) == Signo[j]) {
-          String Anterior = operacion.substring(i - 2, i);
-          String Siguiente = operacion.substring(i + 1, i + 3);
-          // print(Anterior);
-          //print(Siguiente);
-          //print(Signo[j]);
-          Resultado[operacion] = Operaciones(Signo[j], Anterior, Siguiente);
-        }
-      }
-    }
-  }
+//
+//
+  //  (L1U(L2UL3))Δ(L2n(L2*(L3*L2)))
+  //]
 
   Operaciones(String op, String a, String d) {
     switch (op) {
       case 'U':
-        return UnionOperacion(lenguajes[a]!, lenguajes[d]!);
+        return UnionOperacion(lenguajes[a]!, lenguajes[d]!).split('');
 
       case 'n':
-        return InterseccionOperacion(lenguajes[a]!, lenguajes[d]!);
+        return InterseccionOperacion(lenguajes[a]!, lenguajes[d]!).split('');
 
       case '-':
-        return DiferenciaOperacion(lenguajes[a]!, lenguajes[d]!);
+        return DiferenciaOperacion(lenguajes[a]!, lenguajes[d]!).split('');
       case 'Δ':
-        return DiferenciaSimetricaOperacion(lenguajes[a]!, lenguajes[d]!);
+        return DiferenciaSimetricaOperacion(lenguajes[a]!, lenguajes[d]!)
+            .split('');
 
       case 'c':
-        return ComplementoOperacion(lenguajes, lenguajes[a]!);
+        return ComplementoOperacion(lenguajes, lenguajes[a]!).split('');
 
-      case '.':
-        return ProductoOperacion(lenguajes[a]!, lenguajes[a]!);
+      case '*':
+        return ProductoOperacion(lenguajes[a]!, lenguajes[a]!).split('');
 
       default:
     }
 
-    return [];
+    return <String>[];
   }
 
-  List UnionOperacion(List L1, List L2) {
-    List Unica = [...L1, ...L2].toSet().toList();
+  String UnionOperacion(List<String> L1, List<String> L2) {
+    List<String> Unica = [...L1, ...L2].toSet().toList();
 
-    return Unica;
+    return Unica.join();
   }
 
-  List InterseccionOperacion(List L1, List L2) {
-    List f = [];
+  String InterseccionOperacion(List L1, List L2) {
+    List<String> f = [];
     for (var i = 0; i < L1.length; i++) {
       for (var j = 0; j < L2.length; j++) {
         if (L1[i] == L2[j]) {
@@ -158,19 +129,19 @@ class OperationLenguajes {
       }
     }
 
-    return f;
+    return f.join();
   }
 
-  List DiferenciaOperacion(List L1, List L2) {
+  String DiferenciaOperacion(List<String> L1, List<String> L2) {
     for (var i = 0; i < L2.length; i++) {
       L1.remove(L2[i]);
     }
 
-    return L1;
+    return L1.join();
   }
 
-  List DiferenciaSimetricaOperacion(List L1, List L2) {
-    List f = [...L1];
+  String DiferenciaSimetricaOperacion(List<String> L1, List<String> L2) {
+    List<String> f = [...L1];
 
     for (var i = 0; i < L2.length; i++) {
       L1.remove(L2[i]);
@@ -181,11 +152,12 @@ class OperationLenguajes {
     }
     f = [...L1, ...L2];
 
-    return f;
+    return f.join();
   }
 
-  List ComplementoOperacion(Map<String, List> lenguajes, List L1) {
-    List f = [];
+  String ComplementoOperacion(
+      Map<String, List<String>> lenguajes, List<String> L1) {
+    List<String> f = [];
 
     lenguajes.forEach((key, value) {
       f.addAll(value);
@@ -193,13 +165,13 @@ class OperationLenguajes {
 
     f = f.toSet().toList();
 
-    f = DiferenciaOperacion(f, L1);
+    f = DiferenciaOperacion(f, L1).split('');
 
-    return f;
+    return f.join();
   }
 
-  List ProductoOperacion(List L1, List L2) {
-    List f = [];
+  String ProductoOperacion(List<String> L1, List<String> L2) {
+    List<String> f = [];
 
     for (var i = 0; i < L1.length; i++) {
       for (var j = 0; j < L2.length; j++) {
@@ -207,6 +179,32 @@ class OperationLenguajes {
       }
     }
 
-    return f;
+    return f.join();
+  }
+
+  Queue<String>? prefija;
+  Stack<String> pila = Stack();
+
+  String rpn() {
+    String eleDer, eleIzq;
+
+    for (var token in prefija!) {
+      if (RegExp('[U,n,-,Δ,c,*]').hasMatch(token)) {
+        eleDer = pila.pop();
+        eleIzq = pila.pop();
+
+        String r = '$eleIzq$token$eleDer';
+        lenguajes['$eleIzq$token$eleDer'] =
+            Operaciones('$token', '$eleIzq', '$eleDer');
+
+        print(r);
+
+        pila.push(r);
+      } else {
+        pila.push(token);
+      }
+    }
+
+    return lenguajes[pila.pop()].toString();
   }
 }

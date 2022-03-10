@@ -4,7 +4,7 @@ import 'stack.dart';
 
 class ShuntingYard {
   List Operacion = [];
-  Queue prefija = Queue();
+  Queue<String> prefija = Queue();
 
   ShuntingYard(List Operacion) {
     this.Operacion = Operacion;
@@ -106,5 +106,5 @@ class ShuntingYard {
     }
   }
 
-  get prefi => prefija;
+  Queue<String> get prefi => prefija;
 }
