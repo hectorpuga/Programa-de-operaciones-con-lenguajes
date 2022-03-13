@@ -11,7 +11,6 @@ class OperationLenguajes {
   String? alfabeto;
   int? a;
   Map<String, List<String>> lenguajes = {};
-  Map<String, List<String>> copiaLenguajes = {};
 
   OperationLenguajes() {}
   void InputData() {
@@ -42,7 +41,6 @@ class OperationLenguajes {
       if (EvaluacionLenguaje(ArregloLg)) {
         print(EvaluacionLenguaje(LG.split(',')));
         lenguajes['L${i + 1}'] = ArregloLg;
-        copiaLenguajes['L${i + 1}'] = ArregloLg;
         print(lenguajes);
       } else {
         print('Error en el alfabeto del lenguaje');
@@ -50,10 +48,10 @@ class OperationLenguajes {
       }
     }
 
-    DetectorOperaciones(lenguajes);
+    DetectorOperaciones();
   }
 
-  bool EvaluacionLenguaje(List Lenguaje) {
+  bool EvaluacionLenguaje(List<String> Lenguaje) {
     for (var c = 0; c < Lenguaje.length; c++) {
       RegExp regExp = RegExp('^[$alfabeto]+\$');
 
@@ -64,9 +62,8 @@ class OperationLenguajes {
     return true;
   }
 
-  DetectorOperaciones(Map Lenguajes) {
+  DetectorOperaciones() {
     stdout.writeln('Ingrese operación');
-
     String Operacion = stdin.readLineSync() ?? 'no lenguajes';
 
     List<String> A = [];
@@ -79,16 +76,8 @@ class OperationLenguajes {
         A.add(Operacion.substring(i, i + 1));
       }
     }
-
-    final f = ShuntingYard(A);
-    final rpn = RPN(f.prefi, lenguajes, copiaLenguajes);
+    final shutinYard = ShuntingYard(A);
+    final rpn = RPN(shutinYard.prefi, lenguajes);
     rpn.rpn();
-//Δ
   }
-
-//
-//
-  //  (L1U(L2UL3))Δ(L2n(L2*(L3*L2)))
-  //]
-
 }

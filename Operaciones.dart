@@ -1,32 +1,34 @@
 class Operaciones {
-  Map<String, List<String>> lenguajes = {};
-  Map<String, List<String>> copiaLenguajes = {};
+  Map<String, List<String>> lenguajes;
+  Map<String, List<String>> copiaLenguajes;
 
   Operaciones(this.lenguajes, this.copiaLenguajes);
 
   TipOperaciones(String op, String a, {String d = ''}) {
+    List<String> copiaA = [...lenguajes[a]!];
+    List<String> copiaB = [...lenguajes[d]!];
+
     switch (op) {
       case 'U':
-        return UnionOperacion(lenguajes[a]!, lenguajes[d]!);
+        return UnionOperacion(copiaA, copiaB);
 
       case '°':
-        return InterseccionOperacion(lenguajes[a]!, lenguajes[d]!);
+        return InterseccionOperacion(copiaA, copiaB);
 
       case '-':
-        return DiferenciaOperacion(lenguajes[a]!, lenguajes[d]!);
+        return DiferenciaOperacion(copiaA, copiaB);
       case 'Δ':
-        return DiferenciaSimetricaOperacion(lenguajes[a]!, lenguajes[d]!);
+        return DiferenciaSimetricaOperacion(copiaA, copiaB);
 
       case '~':
-        return ComplementoOperacion(copiaLenguajes, lenguajes[a]!);
+        return ComplementoOperacion(copiaLenguajes, copiaA);
 
       case '*':
-        return ProductoOperacion(lenguajes[a]!, lenguajes[d]!);
+        return ProductoOperacion(copiaA, copiaB);
 
       default:
+        return <String>[];
     }
-
-    return <String>[];
   }
 
   UnionOperacion(List<String> L1, List<String> L2) {
@@ -35,71 +37,56 @@ class Operaciones {
   }
 
   InterseccionOperacion(List<String> L1, List<String> L2) {
-    List<String> f = [];
+    List<String> interseccion = [];
 
     for (var i = 0; i < L1.length; i++) {
       for (var j = 0; j < L2.length; j++) {
         if (L1[i] == L2[j]) {
-          f.add(L1[i]);
+          interseccion.add(L1[i]);
         }
       }
     }
 
-    return f;
+    return interseccion;
   }
 
   DiferenciaOperacion(List<String> L1, List<String> L2) {
-    List<String> a = [...L1];
-
     for (var i = 0; i < L2.length; i++) {
-      a.remove(L2[i]);
+      L1.remove(L2[i]);
     }
 
-    return a;
+    return L1;
   }
 
   DiferenciaSimetricaOperacion(List<String> L1, List<String> L2) {
-    List<String> f = [];
-
-    List<String> a = [...L1];
-    List<String> b = [...L2];
-
-    List<String> L1Copia = [...L1];
-    List<String> L2Copia = [...L2];
-    for (var i = 0; i < b.length; i++) {
-      L1Copia.remove(b[i]);
-    }
-
-    for (var i = 0; i < a.length; i++) {
-      L2Copia.remove(a[i]);
-    }
-    f = [...L1Copia, ...L2Copia];
-
-    return f;
+    return <String>[
+      ...DiferenciaOperacion([...L1], L2),
+      ...DiferenciaOperacion([...L2], L1)
+    ];
   }
 
   ComplementoOperacion(Map<String, List<String>> lenguajes, List<String> L1) {
-    List<String> f = [];
+    List<String> lenguajes = [];
 
     copiaLenguajes.forEach((key, value) {
-      f.addAll(value);
+      lenguajes.addAll(value);
     });
 
-    f = f.toSet().toList();
-    List s = DiferenciaOperacion(f, L1);
+    lenguajes = lenguajes.toSet().toList();
+    List complemento = DiferenciaOperacion(lenguajes, L1);
 
-    return s;
+    return complemento;
   }
 
   ProductoOperacion(List<String> L1, List<String> L2) {
-    List<String> f = [];
+    List<String> producto = [];
 
     for (var i = 0; i < L1.length; i++) {
       for (var j = 0; j < L2.length; j++) {
-        f.add(L1[i] + L2[j]);
+        producto.add(L1[i] + L2[j]);
       }
     }
 
-    return f;
+    return producto;
   }
 }

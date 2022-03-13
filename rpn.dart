@@ -7,12 +7,11 @@ class RPN {
   Queue<String>? prefija;
   Stack<String> pila = Stack();
   Map<String, List<String>> lenguajes = {};
-  Map<String, List<String>> copiaLenguajes = {};
 
-  RPN(this.prefija, this.lenguajes, this.copiaLenguajes);
+  RPN(this.prefija, this.lenguajes);
 
   List<String>? rpn() {
-    Operaciones operaciones = Operaciones(lenguajes, copiaLenguajes);
+    Operaciones operaciones = Operaciones(lenguajes, {...lenguajes});
     String eleDer = '', eleIzq;
 
     for (var token in prefija!) {
