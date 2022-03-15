@@ -21,7 +21,7 @@ class RPN {
         }
         eleIzq = pila.pop();
 
-        String r = '$eleIzq$token$eleDer';
+        String operacion = '$eleIzq$token$eleDer';
         lenguajes['$eleIzq$token$eleDer'] =
             operaciones.TipOperaciones('$token', '$eleIzq', d: '$eleDer');
         print('---------------------------------------------------');
@@ -29,7 +29,7 @@ class RPN {
             ': ' +
             '${lenguajes['$eleIzq$token$eleDer']}');
 
-        pila.push(r);
+        pila.push(operacion);
       } else {
         pila.push(token);
       }

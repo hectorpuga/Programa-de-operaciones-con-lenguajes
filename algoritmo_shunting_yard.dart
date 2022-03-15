@@ -85,9 +85,8 @@ class ShuntingYard {
     }
   }
 
-  bool compararPresedencia(String opExp, String opTopPila) {
-    return darPresedencia(opExp) < darPresendicaPila(opTopPila);
-  }
+  bool compararPresedencia(String opExp, String opTopPila) =>
+      darPresedencia(opExp) < darPresendicaPila(opTopPila);
 
   int darPresendicaPila(String op) {
     switch (op) {

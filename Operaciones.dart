@@ -31,10 +31,8 @@ class Operaciones {
     }
   }
 
-  UnionOperacion(List<String> L1, List<String> L2) {
-    List<String> Unica = [...L1, ...L2].toSet().toList();
-    return Unica;
-  }
+  UnionOperacion(List<String> L1, List<String> L2) =>
+      <String>[...L1, ...L2].toSet().toList();
 
   InterseccionOperacion(List<String> L1, List<String> L2) {
     List<String> interseccion = [];
@@ -58,12 +56,10 @@ class Operaciones {
     return L1;
   }
 
-  DiferenciaSimetricaOperacion(List<String> L1, List<String> L2) {
-    return <String>[
-      ...DiferenciaOperacion([...L1], L2),
-      ...DiferenciaOperacion([...L2], L1)
-    ];
-  }
+  DiferenciaSimetricaOperacion(List<String> L1, List<String> L2) => <String>[
+        ...DiferenciaOperacion([...L1], L2),
+        ...DiferenciaOperacion([...L2], L1)
+      ];
 
   ComplementoOperacion(Map<String, List<String>> lenguajes, List<String> L1) {
     List<String> lenguajes = [];

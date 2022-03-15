@@ -12,9 +12,10 @@ class OperationLenguajes {
   int? a;
   Map<String, List<String>> lenguajes = {};
 
-  OperationLenguajes() {}
+  OperationLenguajes();
   void InputData() {
     stdout.writeln('Ingrese los simbolos del alfabeto');
+    stdout.writeln('Ejemplo: a,b,c,e');
     alfabeto = stdin.readLineSync() ?? 'no alfabeto';
     alfabeto!.replaceAll(',', '');
     String alfabeto2 = '';
@@ -34,6 +35,8 @@ class OperationLenguajes {
 
     for (var i = 0; i < a!; i++) {
       stdout.writeln('Ingrese Lenguaje ${i + 1}');
+      stdout.writeln('Ejemplo: ab,cd,ea');
+
       String LG = stdin.readLineSync() ?? 'no lenguajes';
 
       List<String> ArregloLg = LG.split(',');
@@ -64,12 +67,13 @@ class OperationLenguajes {
 
   DetectorOperaciones() {
     stdout.writeln('Ingrese operación');
+    stdout.writeln('Ejemplo: L1ΔL2');
     String Operacion = stdin.readLineSync() ?? 'no lenguajes';
 
     List<String> A = [];
     for (var i = 0; i < Operacion.length; i++) {
-      if (Operacion.substring(i, i + 1) == 'L') {
-        String L = Operacion.substring(i, i + 2);
+      if (Operacion.substring(i, i + 1).toUpperCase() == 'L') {
+        String L = Operacion.substring(i, i + 2).toUpperCase();
         i = i + 1;
         A.add(L);
       } else {
