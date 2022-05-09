@@ -15,15 +15,16 @@ class RPN {
     String eleDer = '', eleIzq;
 
     for (var token in prefija!) {
-      if (RegExp('[U°Δ~*]').hasMatch(token) || token == '-') {
-        if (token != '~') {
+      if (RegExp('[U°Δ~*]|ε').hasMatch(token) || token == '-') {
+        if (token != '~' && token != 'ε' && token != '|') {
           eleDer = pila.pop();
         }
         eleIzq = pila.pop();
 
         String operacion = '$eleIzq$token$eleDer';
+
         lenguajes['$eleIzq$token$eleDer'] =
-            operaciones.TipOperaciones('$token', '$eleIzq', d: '$eleDer');
+            operaciones.tipOperaciones('$token', '$eleIzq', d: '$eleDer');
         print('---------------------------------------------------');
         print('$eleIzq$token$eleDer' +
             ': ' +

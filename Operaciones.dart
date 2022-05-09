@@ -4,37 +4,44 @@ class Operaciones {
 
   Operaciones(this.lenguajes, this.copiaLenguajes);
 
-  TipOperaciones(String op, String a, {String d = ''}) {
-    List<String> copiaA = [...lenguajes[a]!];
-    List<String> copiaB = [...lenguajes[d]!];
+  tipOperaciones(String op, String a, {String d = ''}) {
+    print(op);
 
+    List<String> copiaA = [...lenguajes[a]!];
+
+    List<String> copiaB = d != '' ? [...lenguajes[d]!] : <String>[];
+    print(copiaA);
     switch (op) {
       case 'U':
-        return UnionOperacion(copiaA, copiaB);
+        return unionOperacion(copiaA, copiaB);
 
       case '°':
-        return InterseccionOperacion(copiaA, copiaB);
+        return interseccionOperacion(copiaA, copiaB);
 
       case '-':
-        return DiferenciaOperacion(copiaA, copiaB);
+        return diferenciaOperacion(copiaA, copiaB);
       case 'Δ':
-        return DiferenciaSimetricaOperacion(copiaA, copiaB);
+        return diferenciaSimetricaOperacion(copiaA, copiaB);
 
       case '~':
-        return ComplementoOperacion(copiaLenguajes, copiaA);
+        return complementoOperacion(copiaLenguajes, copiaA);
 
       case '*':
-        return ProductoOperacion(copiaA, copiaB);
+        return productoOperacion(copiaA, copiaB);
+      case 'ε':
+        return cerraduraDeKleene(copiaA, 3);
+      case '|':
+        return cerraduraPositiva(copiaA, 3);
 
       default:
         return <String>[];
     }
   }
 
-  UnionOperacion(List<String> L1, List<String> L2) =>
+  unionOperacion(List<String> L1, List<String> L2) =>
       <String>[...L1, ...L2].toSet().toList();
 
-  InterseccionOperacion(List<String> L1, List<String> L2) {
+  interseccionOperacion(List<String> L1, List<String> L2) {
     List<String> interseccion = [];
 
     for (var i = 0; i < L1.length; i++) {
@@ -48,7 +55,7 @@ class Operaciones {
     return interseccion;
   }
 
-  DiferenciaOperacion(List<String> L1, List<String> L2) {
+  diferenciaOperacion(List<String> L1, List<String> L2) {
     for (var i = 0; i < L2.length; i++) {
       L1.remove(L2[i]);
     }
@@ -56,12 +63,12 @@ class Operaciones {
     return L1;
   }
 
-  DiferenciaSimetricaOperacion(List<String> L1, List<String> L2) => <String>[
-        ...DiferenciaOperacion([...L1], L2),
-        ...DiferenciaOperacion([...L2], L1)
+  diferenciaSimetricaOperacion(List<String> L1, List<String> L2) => <String>[
+        ...diferenciaOperacion([...L1], L2),
+        ...diferenciaOperacion([...L2], L1)
       ];
 
-  ComplementoOperacion(Map<String, List<String>> lenguajes, List<String> L1) {
+  complementoOperacion(Map<String, List<String>> lenguajes, List<String> L1) {
     List<String> lenguajes = [];
 
     copiaLenguajes.forEach((key, value) {
@@ -69,12 +76,12 @@ class Operaciones {
     });
 
     lenguajes = lenguajes.toSet().toList();
-    List complemento = DiferenciaOperacion(lenguajes, L1);
+    List complemento = diferenciaOperacion(lenguajes, L1);
 
     return complemento;
   }
 
-  ProductoOperacion(List<String> L1, List<String> L2) {
+  productoOperacion(List<String> L1, List<String> L2) {
     List<String> producto = [];
 
     for (var i = 0; i < L1.length; i++) {
@@ -84,5 +91,46 @@ class Operaciones {
     }
 
     return producto;
+  }
+
+  cerraduraDeKleene(List<String> L1, int ite) {
+    List<String> erraduraKleene = ['ε'];
+    List<String> resultado = ['ε'];
+    List<String> resultadoTempora = [];
+
+    for (var i = 0; i < ite; i++) {
+      for (var a = 0; a < L1.length; a++) {
+        for (var b = 0; b < resultado.length; b++) {
+          resultadoTempora
+              .add(resultado[b] != 'ε' ? L1[a] + resultado[b] : L1[a]);
+        }
+      }
+
+      resultado = [...resultadoTempora];
+      erraduraKleene.addAll(resultado);
+      resultadoTempora.clear();
+    }
+    print(erraduraKleene);
+    return erraduraKleene;
+  }
+
+  cerraduraPositiva(List<String> L1, int ite) {
+    List<String> cerraduraPositiva = [];
+    List<String> resultado = [...L1];
+    List<String> resultadoTempora = [];
+
+    for (var i = 0; i < ite; i++) {
+      for (var a = 0; a < L1.length; a++) {
+        for (var b = 0; b < resultado.length; b++) {
+          resultadoTempora.add(L1[a] + resultado[b]);
+        }
+      }
+
+      resultado = [...resultadoTempora];
+      cerraduraPositiva.addAll(resultado);
+      resultadoTempora.clear();
+    }
+    print(cerraduraPositiva);
+    return cerraduraPositiva;
   }
 }
