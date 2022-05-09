@@ -12,13 +12,15 @@ class RPN {
 
   List<String>? rpn() {
     Operaciones operaciones = Operaciones(lenguajes, {...lenguajes});
-    String eleDer = '', eleIzq;
 
     for (var token in prefija!) {
-      if (RegExp('[U°Δ~*]|ε').hasMatch(token) || token == '-') {
-        if (token != '~' && token != 'ε' && token != '|') {
+      String eleDer = '', eleIzq = '';
+
+      if (RegExp('[U°Δ~*ε]').hasMatch(token) || token == '-' || token == 'e') {
+        if (token != '~' && token != 'ε' && token != 'e') {
           eleDer = pila.pop();
         }
+
         eleIzq = pila.pop();
 
         String operacion = '$eleIzq$token$eleDer';

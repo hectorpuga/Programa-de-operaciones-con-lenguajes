@@ -5,12 +5,10 @@ class Operaciones {
   Operaciones(this.lenguajes, this.copiaLenguajes);
 
   tipOperaciones(String op, String a, {String d = ''}) {
-    print(op);
-
     List<String> copiaA = [...lenguajes[a]!];
 
     List<String> copiaB = d != '' ? [...lenguajes[d]!] : <String>[];
-    print(copiaA);
+
     switch (op) {
       case 'U':
         return unionOperacion(copiaA, copiaB);
@@ -27,11 +25,11 @@ class Operaciones {
         return complementoOperacion(copiaLenguajes, copiaA);
 
       case '*':
-        return productoOperacion(copiaA, copiaB);
+        return productoOperacion(<String>[...copiaA], <String>[...copiaB]);
       case 'ε':
-        return cerraduraDeKleene(copiaA, 3);
-      case '|':
-        return cerraduraPositiva(copiaA, 3);
+        return cerraduraDeKleene([...copiaA], 2);
+      case 'e':
+        return cerraduraPositiva(copiaA, 2);
 
       default:
         return <String>[];
@@ -84,12 +82,18 @@ class Operaciones {
   productoOperacion(List<String> L1, List<String> L2) {
     List<String> producto = [];
 
+    if (L1.contains('ε') && L2.contains('ε')) {
+      L1.remove('ε');
+      L2.remove('ε');
+    }
+
     for (var i = 0; i < L1.length; i++) {
       for (var j = 0; j < L2.length; j++) {
         producto.add(L1[i] + L2[j]);
       }
     }
 
+    producto.insert(0, 'ε');
     return producto;
   }
 
@@ -110,11 +114,11 @@ class Operaciones {
       erraduraKleene.addAll(resultado);
       resultadoTempora.clear();
     }
-    print(erraduraKleene);
     return erraduraKleene;
   }
 
   cerraduraPositiva(List<String> L1, int ite) {
+    L1.remove('ε');
     List<String> cerraduraPositiva = [];
     List<String> resultado = [...L1];
     List<String> resultadoTempora = [];
@@ -130,7 +134,6 @@ class Operaciones {
       cerraduraPositiva.addAll(resultado);
       resultadoTempora.clear();
     }
-    print(cerraduraPositiva);
     return cerraduraPositiva;
   }
 }
