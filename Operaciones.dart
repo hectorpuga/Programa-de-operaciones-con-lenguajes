@@ -25,11 +25,11 @@ class Operaciones {
         return complementoOperacion(copiaLenguajes, copiaA);
 
       case '*':
-        return productoOperacion(<String>[...copiaA], <String>[...copiaB]);
+        return productoOperacion(copiaA, copiaB);
       case 'ε':
-        return cerraduraDeKleene([...copiaA], 2);
+        return cerraduraDeKleene(copiaA, 3);
       case 'e':
-        return cerraduraPositiva(copiaA, 2);
+        return cerraduraPositiva(copiaA, 3);
 
       default:
         return <String>[];
